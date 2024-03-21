@@ -3,12 +3,17 @@ import './App.css'
 import { respuestas } from './data';
 
 const App = () => {
+  
   const [count, setCount] = useState(1);
-  const [valorRespuesta, setValorRespuesta] = useState(0);
+  const [indiceAcumulado, setIndiceAcumulado] = useState(0);
+  
+  const resp = respuestas.find(respuesta => respuesta.idAnswers === count);
+  const { answersTxt } = resp; // Extraemos el array de answersTxt del objeto encontrado
 
-  const respuestasId1 = respuestas.find(respuesta => respuesta.idAnswers === count);
-  // Extraemos el array de answersTxt del objeto encontrado
-  const { answersTxt } = respuestasId1;
+  const handleClick = (index) => {
+    console.log(`Valor acumulado del índice: ${indiceAcumulado + index}`);
+    setIndiceAcumulado(indiceAcumulado + index); // Actualizar el estado con el valor acumulado
+  };
   return (
     <>
       <h1>Inventario de Depresión de Beck</h1>
@@ -18,9 +23,8 @@ const App = () => {
           <div key={index} style={{ marginBottom: '10px' }}>
             <button
               onClick={() => {
-                console.log(index);
-                setCount((count) => count + 1)
-
+                handleClick(index);
+                setCount((count) => count + 1);
                 }
               }
               style={{ width: '100%', textAlign: 'left' }}>
