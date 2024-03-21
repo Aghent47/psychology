@@ -1,19 +1,9 @@
 import { useState } from 'react'
 import './App.css'
 import { respuestas } from './data';
+import PropTypes from 'prop-types';
 
-const App = () => {
-
-
-  return (
-    <>
-      <Test/>
-    </>
-  )
-}
-
-//Test a realizar
-const Test = () => {
+const App = ({title, subtitle}) => {
 
   const [count, setCount] = useState(1);
   const [indiceAcumulado, setIndiceAcumulado] = useState(0);
@@ -28,8 +18,8 @@ const Test = () => {
 
   return (
     <>
-      <h1>Inventario de Depresión de Beck</h1>
-      <h3>Por favor Seleccione una opción</h3>
+      <h1> {title} </h1>
+      <h3> {subtitle} </h3>
       <div className="card">
         {answersTxt.map((texto, index) => (
           <div key={index} style={{ marginBottom: '10px' }}>
@@ -49,7 +39,24 @@ const Test = () => {
       </div>
     </>
   )
+}
 
+//Test a realizar
+// const Test = () => {
+
+
+// Definiendo los PropTypes
+
+App.propTypes = {
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string.isRequired,
+}
+
+// }
+App.defaultProps = {
+  title: 'Inventario de Depresión de Beck',
+  subtitle: 'Por favor Seleccione una opción',
+  desc: ''
 }
 
 
