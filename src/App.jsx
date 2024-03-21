@@ -1,33 +1,35 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { respuestas } from './data';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [count, setCount] = useState(1);
+  const [valorRespuesta, setValorRespuesta] = useState(0);
 
+  const respuestasId1 = respuestas.find(respuesta => respuesta.idAnswers === count);
+  // Extraemos el array de answersTxt del objeto encontrado
+  const { answersTxt } = respuestasId1;
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+      <h1>Inventario de Depresión de Beck</h1>
+      <h3>Por favor Seleccione una opción</h3>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        {answersTxt.map((texto, index) => (
+          <div key={index} style={{ marginBottom: '10px' }}>
+            <button
+              onClick={() => {
+                console.log(index);
+                setCount((count) => count + 1)
+
+                }
+              }
+              style={{ width: '100%', textAlign: 'left' }}>
+              {texto}
+            </button>
+          </div>
+        ))}
+
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
