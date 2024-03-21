@@ -3,61 +3,103 @@ import './App.css'
 import { respuestas } from './data';
 import PropTypes from 'prop-types';
 
-const App = ({title, subtitle}) => {
-
-  const [count, setCount] = useState(1);
-  const [indiceAcumulado, setIndiceAcumulado] = useState(0);
-
-  const resp = respuestas.find(respuesta => respuesta.idAnswers === count);
-  const { answersTxt } = resp; // Extraemos el array de answersTxt del objeto encontrado
-
-  const handleClick = (index) => {
-    console.log(`Valor acumulado del índice: ${indiceAcumulado + index}`);
-    setIndiceAcumulado(indiceAcumulado + index); // Actualizar el estado con el valor acumulado
-  };
-
+const App = () => {
   return (
-    <>
-      <h1> {title} </h1>
-      <h3> {subtitle} </h3>
-      <div className="card">
-        {answersTxt.map((texto, index) => (
-          <div key={index} style={{ marginBottom: '10px' }}>
-            <button
-              onClick={() => {
-                if (count < 21) {
-                  handleClick(index);
-                  setCount((count) => count + 1);
-                }
-              }}
-              style={{ width: '100%', textAlign: 'left' }}>
-              {texto}
-            </button>
-          </div>
-        ))}
-
-      </div>
-    </>
+    <Test />
   )
 }
 
 //Test a realizar
-// const Test = () => {
+const Test = ({ title, subtitle }) => {
+  const [count, setCount] = useState(1);
+  const [indiceAcumulado, setIndiceAcumulado] = useState(0);
+  const [testCompeto, setTestCompeto] = useState(false);
 
+  const resp = respuestas.find(respuesta => respuesta.idAnswers === count);
+  let diagnisco = '';
+  const resultado = indiceAcumulado;
+
+  if (!resp) {
+    if (resultado <= 10) {
+      diagnisco = 'Estos altibajos son normales';
+    } else if (resultado <= 16) {
+      diagnisco = 'Leve Perturbacion del estado de animo';
+    } else if (resultado <= 20) {
+      diagnisco = 'Estado de depresión intermitentes';
+    } else if (resultado <= 30) {
+      diagnisco = 'Depresión Moderada';
+    } else if (resultado <= 40) {
+      diagnisco = 'Depresión Grave';
+    } else if (resultado <= 64) {
+      diagnisco = 'Depresión Extrema';
+    }
+    return (
+      <>
+        {<TestCompletado />}
+        <h2>Su diagnostico es: {diagnisco}</h2>
+      </>)
+  } else {
+
+    const { answersTxt } = resp; // Extraemos el array de answersTxt del objeto encontrado
+
+    const handleClick = (index) => {
+      console.log(`Valor acumulado del índice: ${indiceAcumulado + index}`);
+      setIndiceAcumulado(indiceAcumulado + index); // Actualizar el estado con el valor acumulado 
+      // resultado = indiceAcumulado + index;
+
+    }
+    return (
+      <>
+        {testCompeto ? <TestCompletado /> : <div>
+          <h1> {title} </h1>
+          <h3> {subtitle} </h3>
+          <div className="card">
+            {answersTxt.map((texto, index) => (
+              <div key={index} style={{ marginBottom: '10px' }}>
+                <button
+                  onClick={() => {
+                    if (count <= 21) {
+                      handleClick(index);
+                      setCount((count) => count + 1);
+                    } else {
+                      setTestCompeto(true);
+                    }
+                  }}
+                  style={{ width: '100%', textAlign: 'left' }}>
+                  {texto}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>}
+      </>
+    )
+  }
+}
+
+// Test Completado
+const TestCompletado = () => {
+  return (
+    <>
+      <div className="card">
+        <h1>Test Completado</h1>
+      </div>
+
+    </>
+  )
+}
 
 // Definiendo los PropTypes
-
-App.propTypes = {
+Test.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
 }
 
 // }
-App.defaultProps = {
+Test.defaultProps = {
   title: 'Inventario de Depresión de Beck',
   subtitle: 'Por favor Seleccione una opción',
-  desc: ''
+  desc: '',
 }
-
 
 export default App
