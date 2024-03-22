@@ -13,11 +13,23 @@ const App = () => {
 const Test = ({ title, subtitle }) => {
   const [count, setCount] = useState(1);
   const [indiceAcumulado, setIndiceAcumulado] = useState(0);
-  const [testCompeto, setTestCompeto] = useState(false);
+  const [testCompeto, setTestCompleto] = useState(false);
+  const [selectedTexts, setSelectedTexts] = useState([]);
+  const [showResponses, setShowResponses] = useState(false);
 
   const resp = respuestas.find(respuesta => respuesta.idAnswers === count);
   let diagnisco = '';
   const resultado = indiceAcumulado;
+
+  const handleClick = (index, texto) => {
+    console.log(`Valor acumulado del índice: ${indiceAcumulado + index}`);
+    setIndiceAcumulado(indiceAcumulado + index); // Actualizar el estado con el valor acumulado 
+    setSelectedTexts(prevSelectedTexts => [...prevSelectedTexts, texto]);
+  }
+
+  const handleVerRespuestas = () => {
+    setShowResponses(!showResponses);
+  };
 
   if (!resp) {
     if (resultado <= 10) {
@@ -33,21 +45,49 @@ const Test = ({ title, subtitle }) => {
     } else if (resultado <= 64) {
       diagnisco = 'Depresión Extrema';
     }
+
     return (
       <>
         {<TestCompletado />}
-        <h2>Su diagnostico es: {diagnisco}</h2>
+
+        <h3>
+          NOTA: Una puntuación persistente de 17 o más indica que puede necesitar ayuda profesional.
+        </h3>
+        <h2>Resultado: {resultado}</h2>
+        <h3>Su diagnostico es: {diagnisco}</h3>
+        <button
+          onClick={() => {
+            setCount(1);
+            setIndiceAcumulado(0);
+            setTestCompleto(false);
+            setSelectedTexts([]);
+          }}
+          style={{ textAlign: 'left' }}>
+          Reiniciar
+        </button>
+        &nbsp;  &nbsp;
+        <button
+          onClick={handleVerRespuestas}
+          style={{ textAlign: 'left' }}
+        >
+          Ver Respuestas
+        </button>
+        {showResponses && (
+          <div style={{ marginTop: '20px', backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '5px' }}>
+            <h2 style={{ color: '#333', marginBottom: '10px' }}>Respuestas seleccionadas:</h2>
+            <ul style={{ listStyleType: 'none', padding: 0 }}>
+              {selectedTexts.map((texto, index) => (
+                <li key={index} style={{ marginBottom: '5px', fontSize: '16px' }}>{texto}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
       </>)
   } else {
 
     const { answersTxt } = resp; // Extraemos el array de answersTxt del objeto encontrado
 
-    const handleClick = (index) => {
-      console.log(`Valor acumulado del índice: ${indiceAcumulado + index}`);
-      setIndiceAcumulado(indiceAcumulado + index); // Actualizar el estado con el valor acumulado 
-      // resultado = indiceAcumulado + index;
-
-    }
     return (
       <>
         {testCompeto ? <TestCompletado /> : <div>
@@ -59,10 +99,8 @@ const Test = ({ title, subtitle }) => {
                 <button
                   onClick={() => {
                     if (count <= 21) {
-                      handleClick(index);
+                      handleClick(index, texto);
                       setCount((count) => count + 1);
-                    } else {
-                      setTestCompeto(true);
                     }
                   }}
                   style={{ width: '100%', textAlign: 'left' }}>
@@ -82,7 +120,7 @@ const TestCompletado = () => {
   return (
     <>
       <div className="card">
-        <h1>Test Completado</h1>
+        <h1>Test Completado!!</h1>
       </div>
 
     </>
