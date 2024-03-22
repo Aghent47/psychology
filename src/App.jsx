@@ -109,7 +109,9 @@ const Test = ({ title, subtitle }) => {
               </div>
             ))}
           </div>
-        </div>}
+        </div>
+        }
+        <h5> ©Todos los derechos reservados | 2024 </h5>
       </>
     )
   }
